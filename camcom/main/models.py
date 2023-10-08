@@ -5,6 +5,14 @@ from django.db.models import CheckConstraint, Q, UniqueConstraint
 
 
 class User(models.Model):
+    '''
+    This model resembles fields related to a user of qc process
+    Attributes:
+    1. name
+    2. email
+    3. is_free (bool): If the user is associated with any task or not.
+    4. is_logged_in (bool): If the user is logged in to its system or not.
+    '''
 
     name = models.CharField(max_length=200)
     email = models.EmailField(unique=True)
@@ -13,6 +21,17 @@ class User(models.Model):
 
 
 class Task(models.Model):
+    '''
+    This model resembles fields related to a Task of qc process.
+    
+    Attributes:
+    1. assigned_to (User) : This stores value of user id who has to perform this task, it can be null only untill task status is unassigned.
+    2. name (str) : Name of task
+    3. description (str) : Description of task
+    4. status (str): status can have one of three value as: unassigned/assigned/completed. This will tell current state of task and will be changed according to assignment logic.
+
+    Constraint: The CheckConstraint states that assigned_to fields value cannot be null when the status of task is either of assigned or completed.
+    '''
 
     class TaskStatus(models.TextChoices):
         UNASSIGNED = 'unassigned'
